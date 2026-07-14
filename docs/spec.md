@@ -2,7 +2,7 @@
 
 Daylo is one API for every smart scale: a hosted backend that connects vendor scale APIs (Withings, Tanita Health Planet) and exposes your weight data through a single normalized REST API, plus a JSON-first CLI. Developer-facing, no UI. This document is the single source of truth for v1 — backend, CLI, landing page, and docs are all written against it. If an implementation needs to deviate, update this file first.
 
-Stack: Cloudflare Workers + Hono + Turso (libSQL) + Drizzle + Better Auth (Google social login + magic link + device authorization + API key plugins). Ported from `my-metrix` (see `~/pivop/health/health-system-share/my-metrix/`).
+Hosted service stack: Cloudflare Workers + Hono + Turso (libSQL) + Drizzle + Better Auth (Google social login + magic link + device authorization + API key plugins). The public contract is the normalized REST API and CLI behavior described here.
 
 ## Normalized measurement (core type)
 
@@ -59,15 +59,15 @@ interface WeightProvider {
 
 One contract test suite runs identically against both adapters with mocked HTTP (this is the backbone of the test strategy). Provider quirks live inside adapters; nothing vendor-specific leaks past this interface.
 
-- **Withings**: reuse the `withings-cli` npm client and my-metrix's token encryption + refresh locking. Multi-tenant: token store profile = Daylo userId.
-- **Tanita Health Planet**: OAuth2 at `https://www.healthplanet.jp/oauth/auth` and `/oauth/token`, scope `innerscan`. Measurements: `GET /status/innerscan.json?tag=6021,6022` (6021 = weight kg, 6022 = body fat %). Dates are JST `yyyyMMddHHmmss` — convert to UTC. Real credentials are pending approval; implement against the official docs with mocked responses.
+- **Withings**: OAuth connect, token refresh with locking, encrypted token storage, sync, and normalization are implemented and verified end to end on production `daylo.cc`.
+- **Tanita Health Planet**: OAuth2 at `https://www.healthplanet.jp/oauth/auth` and `/oauth/token`, scope `innerscan`. Measurements: `GET /status/innerscan.json?tag=6021,6022` (6021 = weight kg, 6022 = body fat %). Dates are JST `yyyyMMddHHmmss` — convert to UTC. Production credentials are active; connect, sync, and data retrieval are verified end to end on production `daylo.cc`.
 
-## Multi-tenant lite (schema deltas vs my-metrix)
+## Multi-tenant lite (storage model)
 
 - `body_measurements`: add `user_id` + `provider` + provider-native id; unique on (user_id, provider, provider_measurement_id); index (user_id, timestamp)
 - `oauth_tokens` / `oauth_token_locks`: reuse existing (provider, profile) key with profile = userId
 - `oauth_states`: state → (userId, provider, expiresAt) for the connect flow
-- Webhooks are out of scope for v1 (polling via `POST /api/v1/sync` is the required path; cutline 5 in health/plan.md)
+- Webhooks are out of scope for v1 (polling via `POST /api/v1/sync` is the required path)
 - No consent screens, no org features. Data deletion is the API endpoint only.
 
 ## CLI (`daylo`)

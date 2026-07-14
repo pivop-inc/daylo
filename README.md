@@ -108,10 +108,12 @@ Signup/signin and API key issuance use [Better Auth](https://www.better-auth.com
 
 ## Providers
 
-| Provider             | Status                                       |
-| -------------------- | -------------------------------------------- |
-| Withings             | Implemented — not yet verified in production |
-| Tanita Health Planet | Supported                                    |
+| Provider             | Status                                      |
+| -------------------- | ------------------------------------------- |
+| Withings             | Supported — production verified on daylo.cc |
+| Tanita Health Planet | Supported — production verified on daylo.cc |
+
+Both launch providers have been connected, synced, and verified to return measurements on the hosted production service.
 
 Adding a provider means implementing one `WeightProvider` interface and passing the shared contract-test suite. Vendor quirks never leak past the adapter.
 
