@@ -9,7 +9,7 @@ Daylo exposes weight measurements from smart scales (Withings, Tanita Health Pla
 
 ## Running the CLI
 
-Run every command as `bunx github:katsu105/daylo <command>` (requires [Bun](https://bun.sh)). If the user has aliased `daylo` (e.g. `alias daylo="bunx github:katsu105/daylo"`) and it resolves, use `daylo <command>` directly instead.
+Run every command as `bunx github:pivop-inc/daylo <command>` (requires [Bun](https://bun.sh)). If the user has aliased `daylo` (e.g. `alias daylo="bunx github:pivop-inc/daylo"`) and it resolves, use `daylo <command>` directly instead.
 
 stdout is machine-readable JSON by default — do not pass `--pretty`.
 

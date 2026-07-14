@@ -11,7 +11,7 @@ Every vendor has its own OAuth flow, date format, and payload shape. Daylo hides
 Runs straight from GitHub with [Bun](https://bun.sh) (npm publish comes later):
 
 ```sh
-alias daylo="bunx github:katsu105/daylo"
+alias daylo="bunx github:pivop-inc/daylo"
 
 daylo login              # opens your browser to sign in, creates an API key
 daylo connect withings   # opens your browser for OAuth, waits until connected
@@ -54,12 +54,12 @@ This repo ships a skill ([`skills/daylo/SKILL.md`](skills/daylo/SKILL.md)) that 
 # Claude Code
 mkdir -p ~/.claude/skills/daylo
 curl -fsSL -o ~/.claude/skills/daylo/SKILL.md \
-  https://raw.githubusercontent.com/katsu105/daylo/main/skills/daylo/SKILL.md
+  https://raw.githubusercontent.com/pivop-inc/daylo/main/skills/daylo/SKILL.md
 
 # Codex
 mkdir -p ~/.codex/skills/daylo
 curl -fsSL -o ~/.codex/skills/daylo/SKILL.md \
-  https://raw.githubusercontent.com/katsu105/daylo/main/skills/daylo/SKILL.md
+  https://raw.githubusercontent.com/pivop-inc/daylo/main/skills/daylo/SKILL.md
 ```
 
 Then just ask, e.g. "What was my weight trend this month?" or "Sync my scale and show the latest reading."

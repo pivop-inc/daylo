@@ -9,7 +9,7 @@ Zero runtime dependencies — it runs directly on Bun's built-ins.
 
 ## Run it from the repo
 
-v1 installs via `bunx github:katsu105/daylo`; from a checkout you run the binary
+v1 installs via `bunx github:pivop-inc/daylo`; from a checkout you run the binary
 directly with Bun:
 
 ```sh
