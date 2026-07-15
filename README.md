@@ -4,6 +4,8 @@
 [![npm](https://img.shields.io/npm/v/@pivop/daylo.svg)](https://www.npmjs.com/package/@pivop/daylo)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
+[Website](https://daylo.cc) · [npm](https://www.npmjs.com/package/@pivop/daylo) · [API spec](docs/spec.md)
+
 **One API for every smart scale.**
 
 Daylo connects vendor scale APIs (Withings, Tanita Health Planet) and exposes your weight data through a single normalized REST API and a JSON-first CLI. No UI, no dashboard — just your weight as clean JSON, for developers and AI agents.
