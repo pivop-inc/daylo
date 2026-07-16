@@ -1,6 +1,5 @@
 import { runLogin } from "./commands/login.ts";
 import { runConnect, runDisconnect } from "./commands/providers.ts";
-import { runSync } from "./commands/sync.ts";
 import { runLatest, runList } from "./commands/weight.ts";
 import { CliError, UsageError } from "./errors.ts";
 
@@ -12,7 +11,6 @@ Commands:
   login                      Sign in via browser (device flow), create an API key, save config
   connect <withings|tanita>  Authorize a provider (opens browser, waits up to 5m)
   disconnect <withings|tanita>
-  sync                       Pull new measurements from connected providers
   latest [--pretty]          Newest measurement as JSON (or null)
   list [--days 30] [--provider withings|tanita] [--pretty]
 
@@ -40,8 +38,6 @@ export async function run(argv: string[]): Promise<void> {
       return runConnect(rest);
     case "disconnect":
       return runDisconnect(rest);
-    case "sync":
-      return runSync(rest);
     case "latest":
       return runLatest(rest);
     case "list":

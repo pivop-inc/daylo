@@ -74,8 +74,8 @@
       <ul>
         <li>
           Weight (<code>weightKg</code>), body fat ratio (<code>fatRatioPercent</code>), measurement
-          time (<code>measuredAt</code>), provider, provider-native measurement ID, sync metadata,
-          and information from provider API responses necessary to provide the Service
+          time (<code>measuredAt</code>), provider, provider-native measurement ID, retrieval
+          metadata, and information from provider API responses necessary to provide the Service
         </li>
       </ul>
       <p>
@@ -96,7 +96,8 @@
       <ul>
         <li>
           Request IDs (<code>X-Request-Id</code>), access timestamps, IP addresses, user agents,
-          error information, and operational logs related to authentication, sync, and API usage
+          error information, and operational logs related to authentication, data retrieval, and API
+          usage
         </li>
       </ul>
 
@@ -141,7 +142,7 @@
           and manage sessions
         </li>
         <li>
-          To retrieve, sync, normalize, and provide measurement data from connected providers based
+          To retrieve, store, normalize, and provide measurement data from connected providers based
           on the user's instruction
         </li>
         <li>To connect, update, disconnect, and troubleshoot provider integrations</li>
@@ -220,8 +221,8 @@
           for as long as necessary for authentication, security, and provision of the Service.
         </li>
         <li>
-          We retain measurement data and provider tokens while necessary to provide the Service or
-          until the user deletes the relevant data through
+          We retain measurement data, provider tokens, and internal retrieval state while necessary
+          to provide the Service or until the user deletes the relevant data through
           <code>daylo disconnect &lt;provider&gt;</code> or <code>DELETE /api/v1/me/data</code>.
         </li>
         <li>

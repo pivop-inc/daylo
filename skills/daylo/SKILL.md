@@ -1,11 +1,11 @@
 ---
 name: daylo
-description: Fetch and analyze weight and body-composition data from smart scales via the daylo CLI. Use when the user wants to read, sync, trend, or report their weight or body-fat data, connect or set up a smart scale (Withings, Tanita Health Planet), or configure daylo. Triggers include "What's my weight?", "show my weight trend", "sync my scale", "connect my smart scale", "set up daylo", and Japanese requests like「体重を教えて」「体重の推移」「体重計をつないで」.
+description: Fetch and analyze weight and body-composition data from smart scales via the daylo CLI. Use when the user wants to read, trend, or report their weight or body-fat data, connect or set up a smart scale (Withings, Tanita Health Planet), or configure daylo. Triggers include "What's my weight?", "show my weight trend", "connect my smart scale", "set up daylo", and Japanese requests like「体重を教えて」「体重の推移」「体重計をつないで」.
 ---
 
 # Daylo
 
-Daylo exposes weight measurements from smart scales (Withings, Tanita Health Planet) as normalized JSON through a CLI. Use it to sync and read the user's weight data on their behalf.
+Daylo exposes weight measurements from smart scales (Withings, Tanita Health Planet) as normalized JSON through a CLI. Use it to read the user's weight data on their behalf.
 
 ## Running the CLI
 
@@ -28,9 +28,8 @@ In Claude Code, tell the user they can run these directly with the `!` prefix, e
 
 ## Fetching data
 
-1. `daylo sync` — pull new measurements from every connected provider. Returns `{ "synced": { "withings": 3, "tanita": 0 } }`. When the user needs current data, sync first, then read.
-2. `daylo latest` — the single newest measurement, or `null`.
-3. `daylo list [--days N] [--provider withings|tanita]` — measurements in `measuredAt` descending order. `--days` defaults to 30, max 365. Use `--provider` to filter to one scale.
+1. `daylo latest` — fetch newly available data and return the single newest measurement, or `null`.
+2. `daylo list [--days N] [--provider withings|tanita]` — fetch newly available data and return measurements in `measuredAt` descending order. `--days` defaults to 30, max 365. Use `--provider` to filter to one scale.
 
 ## Output shape
 
@@ -53,7 +52,7 @@ type WeightMeasurement = {
 Errors print to stderr as `{ "error": { "code", "message" } }`. Exit codes: 0 success, 1 error, 2 usage.
 
 - An `unauthorized`-type error means the session expired — ask the user to run `daylo login` again.
-- If `sync` returns all zeros and no provider is connected, ask the user to run `daylo connect withings` or `daylo connect tanita`.
+- If reads return no measurements and no provider is connected, ask the user to run `daylo connect withings` or `daylo connect tanita`.
 
 ## Self-hosted backends
 

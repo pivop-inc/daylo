@@ -108,14 +108,14 @@
 
       <h2><span class="no">§ 06</span>Medical and Health Disclaimer</h2>
       <p>
-        The Service is intended to retrieve, sync, normalize, and provide user measurement data in a
-        machine-readable format. It does not provide medical diagnosis, treatment, prevention,
+        The Service is intended to retrieve, store, normalize, and provide user measurement data in
+        a machine-readable format. It does not provide medical diagnosis, treatment, prevention,
         advice, weight-loss coaching, health evaluation, or emergency response.
       </p>
       <p>
-        Measurement data may be inaccurate, delayed, or incomplete due to devices, providers, sync
-        timing, network conditions, user settings, or other factors. Users should consult a licensed
-        professional for health, medical, exercise, diet, or weight-loss decisions.
+        Measurement data may be inaccurate, delayed, or incomplete due to devices, providers, data
+        retrieval timing, network conditions, user settings, or other factors. Users should consult
+        a licensed professional for health, medical, exercise, diet, or weight-loss decisions.
       </p>
 
       <h2><span class="no">§ 07</span>Prohibited Conduct</h2>
@@ -152,7 +152,7 @@
       <p>
         Users can disconnect a provider and delete stored tokens by running
         <code>daylo disconnect &lt;provider&gt;</code>. Users can also request deletion of
-        measurement data and all stored provider tokens by calling
+        measurement data, all stored provider tokens, and internal retrieval state by calling
         <code>DELETE /api/v1/me/data</code>. This endpoint deletes measurement and connection data;
         it does not delete the account, sessions, API keys, limited inquiry, security, or backup
         records, or minimal legal acceptance records retained for a period reasonably necessary to

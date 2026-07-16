@@ -173,16 +173,6 @@ describe("list", () => {
   });
 });
 
-describe("sync", () => {
-  test("returns a synced map (protocol)", async () => {
-    const res = await runCli(["sync"], { env: authedEnv() });
-    expect(res.code).toBe(0);
-    const body = res.json() as { synced?: unknown };
-    expect(typeof body.synced).toBe("object");
-    expect(body.synced).not.toBeNull();
-  });
-});
-
 describe("connect / disconnect (mock only — real OAuth needs a human)", () => {
   mockTest("connect polls until the provider reports connected", async () => {
     const res = await runCli(["connect", "withings"], {
@@ -194,12 +184,6 @@ describe("connect / disconnect (mock only — real OAuth needs a human)", () => 
     expect(status.connected).toBe(true);
   });
 
-  mockTest("after connect, sync reports a count for that provider", async () => {
-    const res = await runCli(["sync"], { env: authedEnv() });
-    const synced = (res.json() as { synced: Record<string, number> }).synced;
-    expect(typeof synced["withings"]).toBe("number");
-  });
-
   mockTest("disconnect returns ok", async () => {
     const res = await runCli(["disconnect", "withings"], { env: authedEnv() });
     expect(res.code).toBe(0);
@@ -208,6 +192,14 @@ describe("connect / disconnect (mock only — real OAuth needs a human)", () => 
 });
 
 describe("errors and usage", () => {
+  test("sync is no longer a command", async () => {
+    const res = await runCli(["sync"], { env: authedEnv() });
+    expect(res.code).toBe(2);
+    const error = JSON.parse(res.stderr) as { error: { code: string; message: string } };
+    expect(error.error.code).toBe("usage");
+    expect(error.error.message).toContain('Unknown command "sync"');
+  });
+
   mockTest("--api-url cannot forward the stored key to another origin", async () => {
     captureRequests = 0;
     captureAuthorizationHeaders = [];

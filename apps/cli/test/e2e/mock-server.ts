@@ -296,16 +296,6 @@ export function createMockServer(options: MockServerOptions = {}): MockServer {
           return json(200, { measurements: filtered });
         }
 
-        if (method === "POST" && pathname === "/api/v1/sync") {
-          const synced: Partial<Record<ProviderId, number>> = {};
-          for (const provider of PROVIDER_IDS) {
-            if (user.providers.get(provider)!.connected) {
-              synced[provider] = measurements.filter((m) => m.provider === provider).length;
-            }
-          }
-          return json(200, { synced });
-        }
-
         if (method === "GET" && pathname === "/api/v1/providers") {
           return json(200, { providers: providerList(user) });
         }

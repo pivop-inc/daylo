@@ -21,7 +21,6 @@ alias daylo="bunx daylo-cli"
 
 daylo login              # opens your browser to sign in, creates an API key
 daylo connect withings   # opens your browser for OAuth, waits until connected
-daylo sync               # pull your measurements from the provider
 daylo latest             # your most recent weight, as JSON
 ```
 
@@ -37,7 +36,8 @@ daylo latest             # your most recent weight, as JSON
 }
 ```
 
-That's the whole loop: step on the scale, run `daylo sync`, and the data is yours.
+That's the whole loop: step on the scale and ask for your latest data. Daylo fetches newly
+available measurements automatically.
 
 ### CLI
 
@@ -46,7 +46,6 @@ stdout is machine-parseable JSON by default — AI agents are the primary consum
 - `daylo login` — browser sign-in (Google or magic link) via the device flow, creates an API key named `cli`
 - `daylo connect withings|tanita` — OAuth in the browser, polls until connected
 - `daylo disconnect withings|tanita`
-- `daylo sync` — pull new measurements from every connected provider
 - `daylo latest [--pretty]`
 - `daylo list [--days 30] [--provider withings|tanita] [--pretty]`
 
@@ -93,16 +92,15 @@ type WeightMeasurement = {
 };
 ```
 
-| Method + path                                       | Returns                                                                                                                                      |
-| --------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
-| `GET /api/health`                                   | `{ "ok": true }` (no auth)                                                                                                                   |
-| `GET /api/v1/weight/latest`                         | `{ "latest": WeightMeasurement \| null }`                                                                                                    |
-| `GET /api/v1/weight/list?days=30&provider=withings` | `{ "measurements": WeightMeasurement[] }` — `measuredAt` desc; `days` default 30, max 365                                                    |
-| `POST /api/v1/sync`                                 | `{ "synced": { "withings": 3, "tanita": 0 } }`                                                                                               |
-| `GET /api/v1/providers`                             | connection status per provider                                                                                                               |
-| `POST /api/v1/providers/:provider/connect`          | `{ "authorizeUrl": "...", "state": "..." }` — begins OAuth                                                                                   |
-| `DELETE /api/v1/providers/:provider`                | disconnect, delete stored tokens                                                                                                             |
-| `DELETE /api/v1/me/data`                            | delete stored measurements and all stored provider tokens; account, auth data, and minimal legal acceptance records remain outside its scope |
+| Method + path                                       | Returns                                                                                                                                                      |
+| --------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `GET /api/health`                                   | `{ "ok": true }` (no auth)                                                                                                                                   |
+| `GET /api/v1/weight/latest`                         | `{ "latest": WeightMeasurement \| null }`                                                                                                                    |
+| `GET /api/v1/weight/list?days=30&provider=withings` | `{ "measurements": WeightMeasurement[] }` — `measuredAt` desc; `days` default 30, max 365                                                                    |
+| `GET /api/v1/providers`                             | connection status per provider                                                                                                                               |
+| `POST /api/v1/providers/:provider/connect`          | `{ "authorizeUrl": "...", "state": "..." }` — begins OAuth                                                                                                   |
+| `DELETE /api/v1/providers/:provider`                | disconnect, delete stored tokens and internal retrieval state                                                                                                |
+| `DELETE /api/v1/me/data`                            | delete stored measurements, provider tokens, and internal retrieval state; account, auth data, and minimal legal acceptance records remain outside its scope |
 
 Every response includes an `X-Request-Id` header. Non-2xx responses share one error shape:
 
@@ -114,7 +112,7 @@ Signup/signin and API key issuance use [Better Auth](https://www.better-auth.com
 
 ## Data deletion and privacy
 
-`DELETE /api/v1/me/data` is the public measurement and connection data deletion endpoint. It deletes the authenticated user's stored measurements and all stored provider tokens. It does **not** delete the account, sessions, API keys, limited inquiry, security, and backup records, or minimal legal acceptance records that may be retained for a period reasonably necessary to verify contract formation and handle disputes. `daylo disconnect <provider>` deletes the stored tokens for only that provider.
+`DELETE /api/v1/me/data` is the public measurement and connection data deletion endpoint. It deletes the authenticated user's stored measurements, all stored provider tokens, and internal retrieval state. It does **not** delete the account, sessions, API keys, limited inquiry, security, and backup records, or minimal legal acceptance records that may be retained for a period reasonably necessary to verify contract formation and handle disputes. `daylo disconnect <provider>` deletes the stored tokens and internal retrieval state for only that provider.
 
 For account deletion, access, correction, suspension of use, or similar privacy requests, contact [hello@pivop.jp](mailto:hello@pivop.jp). Daylo verifies the request through the registered email address or another reasonable method and responds within a reasonable period.
 
@@ -129,7 +127,7 @@ Daylo does not currently use measurement data to train AI models or sell it for 
 | Withings             | Supported — production verified on daylo.cc |
 | Tanita Health Planet | Supported — production verified on daylo.cc |
 
-Both launch providers have been connected, synced, and verified to return measurements on the hosted production service.
+Both launch providers have been connected and verified to return measurements on the hosted production service.
 
 Adding a provider means implementing one `WeightProvider` interface and passing the shared contract-test suite. Vendor quirks never leak past the adapter.
 

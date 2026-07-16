@@ -35,10 +35,10 @@ Commands (see `docs/spec.md` for the contract):
 - **connect `<withings|tanita>`** — begin OAuth, open the authorize URL in your
   browser, and poll until the provider reports connected (5 min timeout).
 - **disconnect `<withings|tanita>`** — remove a provider.
-- **sync** — pull new measurements from every connected provider.
-- **latest `[--pretty]`** — the newest measurement as JSON (or `null`).
+- **latest `[--pretty]`** — fetch newly available data and return the newest measurement as JSON
+  (or `null`).
 - **list `[--days 30] [--provider withings|tanita] [--pretty]`** — measurements,
-  newest first.
+  newest first, after fetching newly available data.
 
 Global options: `--api-url <url>` (also `DAYLO_API_URL`), `--pretty`, `--help`.
 Saved API keys are bound to the origin used by `daylo login` and are never sent
